@@ -83,15 +83,6 @@ public class TelaPrincipal_GUI extends javax.swing.JFrame {
         cod14 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
-        jPanel4 = new javax.swing.JPanel();
-        jPanel9 = new javax.swing.JPanel();
-        jLabel31 = new javax.swing.JLabel();
-        cod22 = new javax.swing.JTextField();
-        jLabel34 = new javax.swing.JLabel();
-        consulta4 = new javax.swing.JButton();
-        buttonAction6 = new org.edisoncor.gui.button.ButtonAction();
-        jLabel39 = new javax.swing.JLabel();
-        cod27 = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         buttonAction5 = new org.edisoncor.gui.button.ButtonAction();
         jPanel1 = new javax.swing.JPanel();
@@ -114,20 +105,20 @@ public class TelaPrincipal_GUI extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Código", "Nome", "CPF", "Celular", "Sala"
+                "Código", "Nome", "CPF", "Celular", "Sala", "Data", "Inicio", "Fim"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -468,51 +459,7 @@ public class TelaPrincipal_GUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Reservar", jPanel7);
 
-        jPanel4.setLayout(null);
-
-        jPanel9.setLayout(null);
-
-        jLabel31.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel31.setText("Número:");
-        jPanel9.add(jLabel31);
-        jLabel31.setBounds(170, 190, 55, 20);
-        jPanel9.add(cod22);
-        cod22.setBounds(230, 190, 269, 20);
-
-        jLabel34.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jLabel34.setText("Cadastrar nova sala");
-        jPanel9.add(jLabel34);
-        jLabel34.setBounds(270, 30, 180, 56);
-
-        consulta4.setText("Reservar");
-        consulta4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                consulta4ActionPerformed(evt);
-            }
-        });
-        jPanel9.add(consulta4);
-        consulta4.setBounds(300, 360, 100, 30);
-
-        buttonAction6.setText("X");
-        buttonAction6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonAction6ActionPerformed(evt);
-            }
-        });
-        jPanel9.add(buttonAction6);
-        buttonAction6.setBounds(630, 400, 50, 35);
-
-        jLabel39.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel39.setText("Nome:");
-        jPanel9.add(jLabel39);
-        jLabel39.setBounds(170, 160, 55, 20);
-        jPanel9.add(cod27);
-        cod27.setBounds(230, 160, 269, 20);
-
-        jPanel4.add(jPanel9);
-        jPanel9.setBounds(0, 0, 680, 446);
-
-        jTabbedPane1.addTab("Cadastrar", jPanel4);
+        jPanel5.setLayout(null);
 
         buttonAction5.setText("X");
         buttonAction5.addActionListener(new java.awt.event.ActionListener() {
@@ -520,24 +467,12 @@ public class TelaPrincipal_GUI extends javax.swing.JFrame {
                 buttonAction5ActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(buttonAction5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(392, Short.MAX_VALUE)
-                .addComponent(buttonAction5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
+        jPanel5.add(buttonAction5);
+        buttonAction5.setBounds(630, 392, 50, 35);
 
         jTabbedPane1.addTab("HELP", jPanel5);
+
+        jPanel1.setLayout(null);
 
         relatório.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         relatório.setText("Gerar relatório");
@@ -546,6 +481,8 @@ public class TelaPrincipal_GUI extends javax.swing.JFrame {
                 relatórioActionPerformed(evt);
             }
         });
+        jPanel1.add(relatório);
+        relatório.setBounds(238, 174, 199, 53);
 
         buttonAction2.setText("X");
         buttonAction2.addActionListener(new java.awt.event.ActionListener() {
@@ -553,28 +490,8 @@ public class TelaPrincipal_GUI extends javax.swing.JFrame {
                 buttonAction2ActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(238, 238, 238)
-                .addComponent(relatório, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(243, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(buttonAction2, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(174, 174, 174)
-                .addComponent(relatório, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(buttonAction2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
+        jPanel1.add(buttonAction2);
+        buttonAction2.setBounds(629, 392, 51, 35);
 
         jTabbedPane1.addTab("Relatório", jPanel1);
 
@@ -629,14 +546,6 @@ public class TelaPrincipal_GUI extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_buttonAction5ActionPerformed
 
-    private void consulta4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consulta4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_consulta4ActionPerformed
-
-    private void buttonAction6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAction6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_buttonAction6ActionPerformed
-
     private void cod19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cod19ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cod19ActionPerformed
@@ -686,7 +595,6 @@ public class TelaPrincipal_GUI extends javax.swing.JFrame {
     private org.edisoncor.gui.button.ButtonAction buttonAction2;
     private org.edisoncor.gui.button.ButtonAction buttonAction3;
     private org.edisoncor.gui.button.ButtonAction buttonAction5;
-    private org.edisoncor.gui.button.ButtonAction buttonAction6;
     private javax.swing.JTextField cod10;
     private javax.swing.JTextField cod11;
     private javax.swing.JTextField cod12;
@@ -698,10 +606,8 @@ public class TelaPrincipal_GUI extends javax.swing.JFrame {
     private javax.swing.JTextField cod2;
     private javax.swing.JTextField cod20;
     private javax.swing.JTextField cod21;
-    private javax.swing.JTextField cod22;
     private javax.swing.JTextField cod23;
     private javax.swing.JTextField cod24;
-    private javax.swing.JTextField cod27;
     private javax.swing.JTextField cod3;
     private javax.swing.JTextField cod4;
     private javax.swing.JTextField cod5;
@@ -709,7 +615,6 @@ public class TelaPrincipal_GUI extends javax.swing.JFrame {
     private javax.swing.JTextField cod7;
     private javax.swing.JButton consulta;
     private javax.swing.JButton consulta1;
-    private javax.swing.JButton consulta4;
     private javax.swing.JButton jButton3;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
@@ -728,20 +633,15 @@ public class TelaPrincipal_GUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
-    private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
-    private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
-    private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;

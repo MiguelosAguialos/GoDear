@@ -12,7 +12,7 @@ CREATE TABLE reservas(
 id_res int AUTO_INCREMENT NOT NULL,
 nome_res varchar(60) NOT NULL,
 cpf_res int(11) NOT NULL,
-cel_res varchar(30) NOT NULL,
+cel_res long(30) NOT NULL,
 sala_res int(30) NOT NULL,
 data_res int(8) NOT NULL,
 inicio_res int(4) NOT NULL,
