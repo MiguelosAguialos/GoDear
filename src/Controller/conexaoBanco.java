@@ -7,8 +7,6 @@ public class conexaoBanco {
             System.out.println("Driver carregado com sucesso!");
 
 
-
-
        } catch (Exception ex) {
             System.out.println("Driver nao pode ser carregado!");
         }

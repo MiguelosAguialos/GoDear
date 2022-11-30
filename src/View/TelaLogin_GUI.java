@@ -5,7 +5,8 @@
  */
 package View;
 
-import Modal.Login_DAO;
+import Model.Login_DAO;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -38,6 +39,7 @@ public class TelaLogin_GUI extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         senha = new javax.swing.JPasswordField();
+        buttonAction2 = new org.edisoncor.gui.button.ButtonAction();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -84,6 +86,15 @@ public class TelaLogin_GUI extends javax.swing.JFrame {
         panelImage1.add(senha);
         senha.setBounds(490, 30, 190, 30);
 
+        buttonAction2.setText("X");
+        buttonAction2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonAction2ActionPerformed(evt);
+            }
+        });
+        panelImage1.add(buttonAction2);
+        buttonAction2.setBounds(680, 180, 50, 30);
+
         jPanel1.add(panelImage1);
         panelImage1.setBounds(0, 0, 740, 220);
 
@@ -105,7 +116,7 @@ public class TelaLogin_GUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Modal.Login_DAO.verificarLogin();
+        Model.Login_DAO.verificarLogin();
         if (Login_DAO.aprovado == 1){
             this.dispose();
         }
@@ -114,6 +125,13 @@ public class TelaLogin_GUI extends javax.swing.JFrame {
     private void buttonAction1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAction1ActionPerformed
         System.exit(0);
     }//GEN-LAST:event_buttonAction1ActionPerformed
+
+    private void buttonAction2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAction2ActionPerformed
+        int opcao = JOptionPane.showConfirmDialog(null,"Deseja sair do programa?", "Sair do programa",JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (opcao==0){
+            System.exit(0);
+        }
+    }//GEN-LAST:event_buttonAction2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -152,6 +170,7 @@ public class TelaLogin_GUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.button.ButtonAction buttonAction1;
+    private org.edisoncor.gui.button.ButtonAction buttonAction2;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

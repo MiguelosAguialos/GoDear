@@ -5,8 +5,21 @@
  */
 package View;
 
+import com.itextpdf.text.DocumentException;
+import com.mysql.jdbc.PreparedStatement;
+import java.awt.Desktop;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -14,9 +27,112 @@ import java.util.logging.Logger;
  */
 public class TelaPrincipal_GUI extends javax.swing.JFrame {
 
-    /**
-     * Creates new form TelaPrincipal_GUI
-     */
+    static int cod;
+    static String nom;
+    static String cpf;
+    static String cel;
+    static String sala;
+    static String dataReserva;
+    static String inicio;
+    static String fim;
+    String url = "jdbc:mysql://localhost/godear"; // enderço do BD
+    String username = "root";        //nome de um usuário de seu BD
+    String password = "";  // senha do BD
+    
+    public static DefaultTableModel reservas(ResultSet rs) {
+        try {
+           ResultSetMetaData metaData = rs.getMetaData();
+         int numberOfColumns = metaData.getColumnCount();
+            Vector columnNames = new Vector();
+       // AS LINHAS ABAIXO SÃO REFERENTES AOS CAMPOS DA TABELA CLIENTE
+            columnNames.addElement("ID");
+            columnNames.addElement("Nome");
+            columnNames.addElement("Cpf");
+            columnNames.addElement("Cel");
+            columnNames.addElement("Sala");
+            columnNames.addElement("Data");
+            columnNames.addElement("Inicio");
+            columnNames.addElement("Fim");
+         
+            Vector rows = new Vector();
+            while (rs.next()) {
+                Vector newRow = new Vector();
+                for (int i = 1; i <= numberOfColumns; i++) {
+                    newRow.addElement(rs.getObject(i));
+                }
+                rows.addElement(newRow);
+            }
+           return new DefaultTableModel(rows, columnNames);
+       } catch (Exception e) {
+
+           return null;
+        }
+        }
+    
+    public static DefaultTableModel reservas1(ResultSet rs) {
+        try {
+           ResultSetMetaData metaData = rs.getMetaData();
+         int numberOfColumns = metaData.getColumnCount();
+            Vector columnNames = new Vector();
+       // AS LINHAS ABAIXO SÃO REFERENTES AOS CAMPOS DA TABELA CLIENTE
+            columnNames.addElement("Sala");
+            columnNames.addElement("Data");
+            columnNames.addElement("Inicio");
+            columnNames.addElement("Fim");
+         
+            Vector rows = new Vector();
+            while (rs.next()) {
+                Vector newRow = new Vector();
+                for (int i = 1; i <= numberOfColumns; i++) {
+                    newRow.addElement(rs.getObject(i));
+                }
+                rows.addElement(newRow);
+            }
+           return new DefaultTableModel(rows, columnNames);
+       } catch (Exception e) {
+
+           return null;
+        }
+        }
+    
+    
+    public void refresh(){
+    
+        try{
+           Connection conn;
+                  conn = (Connection) DriverManager.getConnection(url, username, password);
+            Controller.conexaoBanco.carregaDriver();
+
+            System.out.println("realizado");
+                    String sql = "SELECT * FROM reservas;";
+        java.sql.PreparedStatement pst = (java.sql.PreparedStatement) conn.prepareStatement(sql);
+        ResultSet rs = pst.executeQuery();
+        View.TelaPrincipal_GUI.tabelaConsultar.setModel(reservas(rs));
+        }
+        catch(Exception e){
+        JOptionPane.showMessageDialog(null, e);
+        }    
+            } 
+    
+    public void refresh1(){
+    
+        try{
+           Connection conn;
+                  conn = (Connection) DriverManager.getConnection(url, username, password);
+            Controller.conexaoBanco.carregaDriver();
+
+            System.out.println("realizado");
+                    String sql = "SELECT sala_res, data_res, inicio_res, fim_res FROM reservas;";
+        java.sql.PreparedStatement pst = (java.sql.PreparedStatement) conn.prepareStatement(sql);
+        ResultSet rs = pst.executeQuery();
+        View.TelaPrincipal_GUI.tabelaReservar.setModel(reservas1(rs));
+        }
+        catch(Exception e){
+        JOptionPane.showMessageDialog(null, e);
+        }    
+            } 
+    
+    
     public TelaPrincipal_GUI() {
         initComponents();
     }
@@ -29,69 +145,83 @@ public class TelaPrincipal_GUI extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
+        entityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("godear?zeroDateTimeBehavior=convertToNullPU").createEntityManager();
+        reservasQuery = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT r FROM Reservas r");
+        reservasList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : reservasQuery.getResultList();
+        reservasQuery1 = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT r FROM Reservas r");
+        reservasList1 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : reservasQuery1.getResultList();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         buttonAction1 = new org.edisoncor.gui.button.ButtonAction();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabelaConsultar = new javax.swing.JTable();
         jLabel10 = new javax.swing.JLabel();
         cod2 = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
-        cod3 = new javax.swing.JTextField();
-        jLabel12 = new javax.swing.JLabel();
-        cod4 = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
-        cod5 = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
-        cod6 = new javax.swing.JTextField();
-        consulta = new javax.swing.JButton();
-        alterar = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        sala1 = new javax.swing.JTextField();
+        btnConsultar = new javax.swing.JButton();
+        btnAlterar = new javax.swing.JButton();
+        btnExcluir = new javax.swing.JButton();
         jLabel28 = new javax.swing.JLabel();
-        cod17 = new javax.swing.JTextField();
         jLabel29 = new javax.swing.JLabel();
-        cod18 = new javax.swing.JTextField();
         jLabel35 = new javax.swing.JLabel();
-        cod23 = new javax.swing.JTextField();
+        jLabel20 = new javax.swing.JLabel();
+        nome1 = new javax.swing.JTextField();
+        cpf1 = new javax.swing.JFormattedTextField();
+        cel1 = new javax.swing.JFormattedTextField();
+        data1 = new javax.swing.JFormattedTextField();
+        inicio1 = new javax.swing.JFormattedTextField();
+        fim1 = new javax.swing.JFormattedTextField();
+        panelImage2 = new org.edisoncor.gui.panel.PanelImage();
         jPanel7 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
-        cod7 = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
-        cod10 = new javax.swing.JTextField();
-        consulta1 = new javax.swing.JButton();
+        btnReserva = new javax.swing.JButton();
         buttonAction3 = new org.edisoncor.gui.button.ButtonAction();
         jLabel30 = new javax.swing.JLabel();
-        cod19 = new javax.swing.JTextField();
         jLabel32 = new javax.swing.JLabel();
-        cod20 = new javax.swing.JTextField();
+        nomeReserva = new javax.swing.JTextField();
         jLabel33 = new javax.swing.JLabel();
-        cod21 = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        cod11 = new javax.swing.JTextField();
-        cod24 = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
-        cod12 = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        cod13 = new javax.swing.JTextField();
-        cod14 = new javax.swing.JTextField();
+        tabelaReservar = new javax.swing.JTable();
+        salaReserva = new javax.swing.JComboBox<>();
+        inicioReserva = new javax.swing.JFormattedTextField();
+        fimReserva = new javax.swing.JFormattedTextField();
+        cpfReserva = new javax.swing.JFormattedTextField();
+        celReserva = new javax.swing.JFormattedTextField();
+        data = new javax.swing.JFormattedTextField();
+        panelImage1 = new org.edisoncor.gui.panel.PanelImage();
+        jPanel1 = new javax.swing.JPanel();
+        Declaracao = new javax.swing.JButton();
+        buttonAction2 = new org.edisoncor.gui.button.ButtonAction();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
+        jButton4 = new javax.swing.JButton();
+        cod3 = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        panelImage3 = new org.edisoncor.gui.panel.PanelImage();
         jPanel5 = new javax.swing.JPanel();
         buttonAction5 = new org.edisoncor.gui.button.ButtonAction();
-        jPanel1 = new javax.swing.JPanel();
-        relatório = new javax.swing.JButton();
-        buttonAction2 = new org.edisoncor.gui.button.ButtonAction();
+        jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
+        panelImage4 = new org.edisoncor.gui.panel.PanelImage();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
 
+        jPanel2.setBackground(new java.awt.Color(153, 252, 175));
         jPanel2.setLayout(null);
 
         buttonAction1.setText("X");
@@ -103,33 +233,36 @@ public class TelaPrincipal_GUI extends javax.swing.JFrame {
         jPanel2.add(buttonAction1);
         buttonAction1.setBounds(630, 400, 50, 35);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Código", "Nome", "CPF", "Celular", "Sala", "Data", "Inicio", "Fim"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
-            };
+        tabelaConsultar.setBackground(new java.awt.Color(240, 240, 240));
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(jTable1);
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, reservasList1, tabelaConsultar);
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${idRes}"));
+        columnBinding.setColumnName("Id");
+        columnBinding.setColumnClass(Integer.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nomeRes}"));
+        columnBinding.setColumnName("Nome");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${cpfRes}"));
+        columnBinding.setColumnName("Cpf");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${celRes}"));
+        columnBinding.setColumnName("Cel ");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${salaRes}"));
+        columnBinding.setColumnName("Sala");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${dataRes}"));
+        columnBinding.setColumnName("Data");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${inicioRes}"));
+        columnBinding.setColumnName("Inicio");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${fimRes}"));
+        columnBinding.setColumnName("Fim");
+        columnBinding.setColumnClass(String.class);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();
+        jScrollPane1.setViewportView(tabelaConsultar);
 
         jPanel2.add(jScrollPane1);
         jScrollPane1.setBounds(0, 0, 680, 210);
@@ -137,109 +270,174 @@ public class TelaPrincipal_GUI extends javax.swing.JFrame {
         jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel10.setText("Código : ");
         jPanel2.add(jLabel10);
-        jLabel10.setBounds(20, 260, 60, 20);
+        jLabel10.setBounds(20, 230, 60, 20);
         jPanel2.add(cod2);
-        cod2.setBounds(90, 260, 200, 20);
+        cod2.setBounds(90, 230, 200, 20);
 
         jLabel11.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel11.setText("Nome:");
+        jLabel11.setText("CPF:");
         jPanel2.add(jLabel11);
-        jLabel11.setBounds(20, 290, 60, 20);
-        jPanel2.add(cod3);
-        cod3.setBounds(90, 290, 200, 20);
-
-        jLabel12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel12.setText("Email:");
-        jPanel2.add(jLabel12);
-        jLabel12.setBounds(20, 320, 60, 20);
-        jPanel2.add(cod4);
-        cod4.setBounds(90, 320, 200, 20);
+        jLabel11.setBounds(20, 320, 60, 20);
 
         jLabel13.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel13.setText("Celular:");
         jPanel2.add(jLabel13);
         jLabel13.setBounds(20, 350, 60, 20);
-        jPanel2.add(cod5);
-        cod5.setBounds(90, 350, 200, 20);
 
-        jLabel14.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel14.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel14.setText("Sala (reservada):");
         jPanel2.add(jLabel14);
-        jLabel14.setBounds(300, 260, 110, 20);
-        jPanel2.add(cod6);
-        cod6.setBounds(420, 260, 130, 20);
+        jLabel14.setBounds(300, 260, 120, 20);
+        jPanel2.add(sala1);
+        sala1.setBounds(420, 260, 130, 20);
 
-        consulta.setText("Consulta");
-        consulta.addActionListener(new java.awt.event.ActionListener() {
+        btnConsultar.setText("Consulta");
+        btnConsultar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnConsultar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                consultaActionPerformed(evt);
+                btnConsultarActionPerformed(evt);
             }
         });
-        jPanel2.add(consulta);
-        consulta.setBounds(560, 260, 100, 30);
+        jPanel2.add(btnConsultar);
+        btnConsultar.setBounds(560, 260, 100, 30);
 
-        alterar.setText("Alterar");
-        alterar.addActionListener(new java.awt.event.ActionListener() {
+        btnAlterar.setText("Alterar");
+        btnAlterar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnAlterar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                alterarActionPerformed(evt);
+                btnAlterarActionPerformed(evt);
             }
         });
-        jPanel2.add(alterar);
-        alterar.setBounds(560, 300, 100, 30);
+        jPanel2.add(btnAlterar);
+        btnAlterar.setBounds(560, 300, 100, 30);
 
-        jButton3.setText("Excluir");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnExcluir.setText("Excluir");
+        btnExcluir.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnExcluirActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton3);
-        jButton3.setBounds(560, 340, 100, 30);
+        jPanel2.add(btnExcluir);
+        btnExcluir.setBounds(560, 340, 100, 30);
 
-        jLabel28.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel28.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel28.setText("Data da reserva:");
         jPanel2.add(jLabel28);
-        jLabel28.setBounds(300, 290, 110, 20);
-        jPanel2.add(cod17);
-        cod17.setBounds(420, 290, 130, 20);
+        jLabel28.setBounds(300, 290, 120, 20);
 
-        jLabel29.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel29.setText("Fim da reserva:");
+        jLabel29.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel29.setText("Inicio Reserva:");
         jPanel2.add(jLabel29);
-        jLabel29.setBounds(300, 320, 110, 20);
-        jPanel2.add(cod18);
-        cod18.setBounds(420, 320, 130, 20);
+        jLabel29.setBounds(300, 320, 120, 20);
 
-        jLabel35.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel35.setText("Tempo:");
+        jLabel35.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel35.setText("Fim Reserva:");
         jPanel2.add(jLabel35);
-        jLabel35.setBounds(300, 350, 110, 20);
-        jPanel2.add(cod23);
-        cod23.setBounds(420, 350, 130, 20);
+        jLabel35.setBounds(300, 350, 120, 20);
+
+        jLabel20.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel20.setText("Nome:");
+        jPanel2.add(jLabel20);
+        jLabel20.setBounds(20, 290, 60, 20);
+        jPanel2.add(nome1);
+        nome1.setBounds(90, 290, 200, 20);
+
+        try {
+            cpf1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        jPanel2.add(cpf1);
+        cpf1.setBounds(90, 320, 200, 20);
+
+        try {
+            cel1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(##)#####-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        jPanel2.add(cel1);
+        cel1.setBounds(90, 350, 200, 20);
+
+        try {
+            data1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        jPanel2.add(data1);
+        data1.setBounds(420, 290, 130, 20);
+
+        try {
+            inicio1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##:##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        jPanel2.add(inicio1);
+        inicio1.setBounds(420, 320, 130, 20);
+
+        try {
+            fim1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##:##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        jPanel2.add(fim1);
+        fim1.setBounds(420, 350, 130, 20);
+
+        panelImage2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/background.jpg"))); // NOI18N
+
+        javax.swing.GroupLayout panelImage2Layout = new javax.swing.GroupLayout(panelImage2);
+        panelImage2.setLayout(panelImage2Layout);
+        panelImage2Layout.setHorizontalGroup(
+            panelImage2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 680, Short.MAX_VALUE)
+        );
+        panelImage2Layout.setVerticalGroup(
+            panelImage2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 470, Short.MAX_VALUE)
+        );
+
+        jPanel2.add(panelImage2);
+        panelImage2.setBounds(0, -30, 680, 470);
 
         jTabbedPane1.addTab("Consultar", jPanel2);
 
-        jLabel15.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jPanel8.setBackground(new java.awt.Color(153, 252, 175));
+        jPanel8.setLayout(null);
+
+        jLabel15.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel15.setText("CPF:");
+        jPanel8.add(jLabel15);
+        jLabel15.setBounds(50, 270, 60, 20);
 
         jLabel16.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel16.setText("Realizar reserva de sala");
+        jPanel8.add(jLabel16);
+        jLabel16.setBounds(240, 180, 235, 56);
 
-        jLabel17.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel17.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel17.setText("Sala:");
+        jPanel8.add(jLabel17);
+        jLabel17.setBounds(50, 330, 60, 20);
 
-        jLabel18.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel18.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel18.setText("Data da reserva:");
+        jPanel8.add(jLabel18);
+        jLabel18.setBounds(400, 240, 120, 20);
 
-        jLabel19.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel19.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel19.setText("Horário início:");
+        jPanel8.add(jLabel19);
+        jLabel19.setBounds(420, 280, 100, 20);
 
-        consulta1.setText("Reservar");
-        consulta1.addActionListener(new java.awt.event.ActionListener() {
+        btnReserva.setText("Reservar");
+        btnReserva.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnReserva.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                consulta1ActionPerformed(evt);
+                btnReservaActionPerformed(evt);
             }
         });
+        jPanel8.add(btnReserva);
+        btnReserva.setBounds(190, 380, 100, 30);
 
         buttonAction3.setText("X");
         buttonAction3.addActionListener(new java.awt.event.ActionListener() {
@@ -247,204 +445,129 @@ public class TelaPrincipal_GUI extends javax.swing.JFrame {
                 buttonAction3ActionPerformed(evt);
             }
         });
+        jPanel8.add(buttonAction3);
+        buttonAction3.setBounds(630, 400, 50, 35);
 
-        jLabel30.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel30.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel30.setText("Horário fim:");
+        jPanel8.add(jLabel30);
+        jLabel30.setBounds(420, 320, 100, 20);
 
-        cod19.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cod19ActionPerformed(evt);
-            }
-        });
-
-        jLabel32.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel32.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel32.setText("Nome:");
+        jPanel8.add(jLabel32);
+        jLabel32.setBounds(50, 240, 60, 20);
+        jPanel8.add(nomeReserva);
+        nomeReserva.setBounds(110, 240, 269, 20);
 
-        jLabel33.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel33.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel33.setText("Celular:");
+        jPanel8.add(jLabel33);
+        jLabel33.setBounds(50, 300, 60, 20);
 
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel1.setText(":");
+        jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, reservasList, tabelaReservar);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${salaRes}"));
+        columnBinding.setColumnName("Sala");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${dataRes}"));
+        columnBinding.setColumnName("Data");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${inicioRes}"));
+        columnBinding.setColumnName("Inicio");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${fimRes}"));
+        columnBinding.setColumnName("Fim");
+        columnBinding.setColumnClass(String.class);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();
+        jScrollPane2.setViewportView(tabelaReservar);
 
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel2.setText(":");
+        jPanel8.add(jScrollPane2);
+        jScrollPane2.setBounds(30, 10, 630, 170);
 
-        cod24.addActionListener(new java.awt.event.ActionListener() {
+        salaReserva.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Informática", "Salão de Festas", "Auditório", "Informática Superior", "Auditório Superior", "Laboratório Mecânico" }));
+        jPanel8.add(salaReserva);
+        salaReserva.setBounds(110, 330, 127, 20);
+
+        try {
+            inicioReserva.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##:##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        inicioReserva.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        inicioReserva.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        inicioReserva.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        inicioReserva.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cod24ActionPerformed(evt);
+                inicioReservaActionPerformed(evt);
             }
         });
+        jPanel8.add(inicioReserva);
+        inicioReserva.setBounds(520, 280, 80, 30);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Sala", "Data", "Inicio", "Fim"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+        try {
+            fimReserva.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##:##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        fimReserva.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        fimReserva.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        fimReserva.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        fimReserva.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fimReservaActionPerformed(evt);
             }
         });
-        jScrollPane2.setViewportView(jTable2);
+        jPanel8.add(fimReserva);
+        fimReserva.setBounds(520, 320, 80, 30);
 
-        jLabel3.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel3.setText("/");
+        try {
+            cpfReserva.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        jPanel8.add(cpfReserva);
+        cpfReserva.setBounds(110, 270, 270, 20);
 
-        jLabel4.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel4.setText("/");
+        try {
+            celReserva.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(##)#####-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        jPanel8.add(celReserva);
+        celReserva.setBounds(110, 300, 270, 20);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        try {
+            data.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        data.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        data.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        data.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        data.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dataActionPerformed(evt);
+            }
+        });
+        jPanel8.add(data);
+        data.setBounds(520, 240, 80, 30);
 
-        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
-        jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(cod20, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(cod7, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(cod10, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel1)
-                                .addGap(10, 10, 10)
-                                .addComponent(cod11, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(cod24, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cod19, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cod12, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel3)
-                                .addGap(10, 10, 10)
-                                .addComponent(cod13, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel4)
-                                .addGap(10, 10, 10)
-                                .addComponent(cod14, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel33, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE))
-                                .addGap(10, 10, 10)
-                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cod21, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGap(123, 123, 123)
-                        .addComponent(consulta1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(26, 26, 26)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(buttonAction3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        panelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/background.jpg"))); // NOI18N
+
+        javax.swing.GroupLayout panelImage1Layout = new javax.swing.GroupLayout(panelImage1);
+        panelImage1.setLayout(panelImage1Layout);
+        panelImage1Layout.setHorizontalGroup(
+            panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 680, Short.MAX_VALUE)
         );
-        jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addGap(42, 42, 42)
-                .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(11, 11, 11)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addComponent(cod20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(6, 6, 6)
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addComponent(cod7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(6, 6, 6)
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addComponent(cod21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(11, 11, 11)
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(11, 11, 11)
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3)
-                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addGap(3, 3, 3)
-                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cod12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(cod13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel4)
-                        .addGroup(jPanel8Layout.createSequentialGroup()
-                            .addGap(3, 3, 3)
-                            .addComponent(cod14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(9, 9, 9)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(cod10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel1)
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(cod11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(11, 11, 11)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(cod24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2)
-                        .addComponent(cod19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(consulta1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-                .addComponent(buttonAction3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(57, 57, 57))
+        panelImage1Layout.setVerticalGroup(
+            panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 470, Short.MAX_VALUE)
         );
+
+        jPanel8.add(panelImage1);
+        panelImage1.setBounds(0, -30, 680, 470);
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -459,6 +582,80 @@ public class TelaPrincipal_GUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Reservar", jPanel7);
 
+        jPanel1.setBackground(new java.awt.Color(153, 252, 175));
+        jPanel1.setLayout(null);
+
+        Declaracao.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        Declaracao.setText("Gerar Declaração");
+        Declaracao.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        Declaracao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DeclaracaoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(Declaracao);
+        Declaracao.setBounds(70, 100, 199, 53);
+
+        buttonAction2.setText("X");
+        buttonAction2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonAction2ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(buttonAction2);
+        buttonAction2.setBounds(629, 392, 51, 35);
+
+        jLabel4.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("Gerar Relatório");
+        jLabel4.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        jPanel1.add(jLabel4);
+        jLabel4.setBounds(390, 40, 220, 50);
+
+        jLabel5.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("Gerar Declaração");
+        jLabel5.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        jPanel1.add(jLabel5);
+        jLabel5.setBounds(30, 40, 280, 50);
+
+        jButton4.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jButton4.setText("Gerar Relatório");
+        jButton4.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton4);
+        jButton4.setBounds(400, 100, 200, 50);
+        jPanel1.add(cod3);
+        cod3.setBounds(330, 190, 190, 30);
+
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel6.setText("Para qual ID fazer a declaração: ");
+        jPanel1.add(jLabel6);
+        jLabel6.setBounds(110, 190, 220, 30);
+
+        panelImage3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/background.jpg"))); // NOI18N
+
+        javax.swing.GroupLayout panelImage3Layout = new javax.swing.GroupLayout(panelImage3);
+        panelImage3.setLayout(panelImage3Layout);
+        panelImage3Layout.setHorizontalGroup(
+            panelImage3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 680, Short.MAX_VALUE)
+        );
+        panelImage3Layout.setVerticalGroup(
+            panelImage3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 470, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(panelImage3);
+        panelImage3.setBounds(0, -30, 680, 470);
+
+        jTabbedPane1.addTab("Relatório", jPanel1);
+
+        jPanel5.setBackground(new java.awt.Color(153, 252, 175));
         jPanel5.setLayout(null);
 
         buttonAction5.setText("X");
@@ -470,30 +667,71 @@ public class TelaPrincipal_GUI extends javax.swing.JFrame {
         jPanel5.add(buttonAction5);
         buttonAction5.setBounds(630, 392, 50, 35);
 
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel1.setText("Aba de Consultas");
+        jPanel5.add(jLabel1);
+        jLabel1.setBounds(50, 30, 160, 30);
+
+        jButton1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jButton1.setText("Abrir PDF");
+        jButton1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel5.add(jButton1);
+        jButton1.setBounds(60, 70, 110, 40);
+
+        jLabel2.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel2.setText("Aba de Reservas");
+        jPanel5.add(jLabel2);
+        jLabel2.setBounds(290, 30, 160, 30);
+
+        jButton2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jButton2.setText("Abrir PDF");
+        jButton2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jPanel5.add(jButton2);
+        jButton2.setBounds(290, 70, 110, 40);
+
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel3.setText("Aba de Relatório");
+        jPanel5.add(jLabel3);
+        jLabel3.setBounds(520, 30, 160, 30);
+
+        jButton3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jButton3.setText("Abrir PDF");
+        jButton3.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        jPanel5.add(jButton3);
+        jButton3.setBounds(520, 70, 110, 40);
+
+        panelImage4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/background.jpg"))); // NOI18N
+
+        javax.swing.GroupLayout panelImage4Layout = new javax.swing.GroupLayout(panelImage4);
+        panelImage4.setLayout(panelImage4Layout);
+        panelImage4Layout.setHorizontalGroup(
+            panelImage4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 680, Short.MAX_VALUE)
+        );
+        panelImage4Layout.setVerticalGroup(
+            panelImage4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 470, Short.MAX_VALUE)
+        );
+
+        jPanel5.add(panelImage4);
+        panelImage4.setBounds(0, -30, 680, 470);
+
         jTabbedPane1.addTab("HELP", jPanel5);
-
-        jPanel1.setLayout(null);
-
-        relatório.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        relatório.setText("Gerar relatório");
-        relatório.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                relatórioActionPerformed(evt);
-            }
-        });
-        jPanel1.add(relatório);
-        relatório.setBounds(238, 174, 199, 53);
-
-        buttonAction2.setText("X");
-        buttonAction2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonAction2ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(buttonAction2);
-        buttonAction2.setBounds(629, 392, 51, 35);
-
-        jTabbedPane1.addTab("Relatório", jPanel1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -503,56 +741,129 @@ public class TelaPrincipal_GUI extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 466, Short.MAX_VALUE)
         );
+
+        bindingGroup.bind();
 
         setSize(new java.awt.Dimension(685, 466));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonAction1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAction1ActionPerformed
-        System.exit(0);
+        int opcao = JOptionPane.showConfirmDialog(null,"Deseja sair do programa?", "Sair do programa",JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (opcao==0){
+            System.exit(0);
+        }
     }//GEN-LAST:event_buttonAction1ActionPerformed
 
     private void buttonAction2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAction2ActionPerformed
-        System.exit(0);
+        int opcao = JOptionPane.showConfirmDialog(null,"Deseja sair do programa?", "Sair do programa",JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (opcao==0){
+            System.exit(0);
+        }
     }//GEN-LAST:event_buttonAction2ActionPerformed
 
-    private void relatórioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_relatórioActionPerformed
-
-    }//GEN-LAST:event_relatórioActionPerformed
-
-    private void consultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaActionPerformed
+    private void DeclaracaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeclaracaoActionPerformed
+        try {
+            // Gerador de relatórios
+            Model.PdfDeclaracao_DAO.Relatorio();
+        } catch (DocumentException ex) {
+            Logger.getLogger(TelaPrincipal_GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-    }//GEN-LAST:event_consultaActionPerformed
+    }//GEN-LAST:event_DeclaracaoActionPerformed
 
-    private void alterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alterarActionPerformed
-      
-    }//GEN-LAST:event_alterarActionPerformed
+    private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
+       
+        Model.Consultar_DAO.Consultar();
+        refresh();
+        refresh1();
+    
+    }//GEN-LAST:event_btnConsultarActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
+        int opcao = JOptionPane.showConfirmDialog(null,"Deseja realmente alterar esses dados da reserva/usuário?", "Alterar dados usuário/reserva",JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (opcao==0){
+            Model.Consultar_DAO.Alterar();
+        }
+        refresh();
+        refresh1();
 
-    private void consulta1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consulta1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_consulta1ActionPerformed
+    }//GEN-LAST:event_btnAlterarActionPerformed
 
-    private void buttonAction3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAction3ActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_buttonAction3ActionPerformed
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        int opcao = JOptionPane.showConfirmDialog(null,"Deseja realmente excluir esses dados da reserva/usuário?", "Ecluir dados usuário/reserva",JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (opcao==0){
+            Model.Consultar_DAO.Excluir();
+        }
+        refresh();
+        refresh1();
+    }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void buttonAction5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAction5ActionPerformed
-        System.exit(0);
+        int opcao = JOptionPane.showConfirmDialog(null,"Deseja sair do programa?", "Sair do programa",JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (opcao==0){
+            System.exit(0);
+        }
     }//GEN-LAST:event_buttonAction5ActionPerformed
 
-    private void cod19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cod19ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cod19ActionPerformed
+    private void buttonAction3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAction3ActionPerformed
+        int opcao = JOptionPane.showConfirmDialog(null,"Deseja sair do programa?", "Sair do programa",JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (opcao==0){
+            System.exit(0);
+        }
+    }//GEN-LAST:event_buttonAction3ActionPerformed
 
-    private void cod24ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cod24ActionPerformed
+    private void btnReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReservaActionPerformed
+        Model.Reservar_DAO.Reservar();
+        refresh();
+        refresh1();
+    }//GEN-LAST:event_btnReservaActionPerformed
+
+    private void inicioReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inicioReservaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cod24ActionPerformed
+    }//GEN-LAST:event_inicioReservaActionPerformed
+
+    private void fimReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fimReservaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fimReservaActionPerformed
+
+    private void dataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dataActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dataActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            Process exec = Runtime.getRuntime().exec("cmd /C start https://drive.google.com/file/d/1h-ivNuuTa2L-ddGhaAHKkjXR6zU4gDwO/view?usp=share_link");
+        } catch (IOException ex) {
+            Logger.getLogger(TelaPrincipal_GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            Process exec = Runtime.getRuntime().exec("cmd /C start https://drive.google.com/file/d/1J54WkQyTLZ2MucjUH_8lNW2VKU0vxfJV/view?usp=share_link");
+        } catch (IOException ex) {
+            Logger.getLogger(TelaPrincipal_GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        try {
+            Process exec = Runtime.getRuntime().exec("cmd /C start https://drive.google.com/file/d/1kMPGqn0aKT9dstN7uVhdee8nqR86H-K8/view?usp=share_link");
+        } catch (IOException ex) {
+            Logger.getLogger(TelaPrincipal_GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        try {
+            Model.PdfReserva_DAO.Relatorio();
+        } catch (DocumentException ex) {
+            Logger.getLogger(TelaPrincipal_GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -590,37 +901,35 @@ public class TelaPrincipal_GUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton alterar;
+    private javax.swing.JButton Declaracao;
+    private javax.swing.JButton btnAlterar;
+    private javax.swing.JButton btnConsultar;
+    private javax.swing.JButton btnExcluir;
+    private javax.swing.JButton btnReserva;
     private org.edisoncor.gui.button.ButtonAction buttonAction1;
     private org.edisoncor.gui.button.ButtonAction buttonAction2;
     private org.edisoncor.gui.button.ButtonAction buttonAction3;
     private org.edisoncor.gui.button.ButtonAction buttonAction5;
-    private javax.swing.JTextField cod10;
-    private javax.swing.JTextField cod11;
-    private javax.swing.JTextField cod12;
-    private javax.swing.JTextField cod13;
-    private javax.swing.JTextField cod14;
-    private javax.swing.JTextField cod17;
-    private javax.swing.JTextField cod18;
-    private javax.swing.JTextField cod19;
-    private javax.swing.JTextField cod2;
-    private javax.swing.JTextField cod20;
-    private javax.swing.JTextField cod21;
-    private javax.swing.JTextField cod23;
-    private javax.swing.JTextField cod24;
-    private javax.swing.JTextField cod3;
-    private javax.swing.JTextField cod4;
-    private javax.swing.JTextField cod5;
-    private javax.swing.JTextField cod6;
-    private javax.swing.JTextField cod7;
-    private javax.swing.JButton consulta;
-    private javax.swing.JButton consulta1;
+    public static javax.swing.JFormattedTextField cel1;
+    public static javax.swing.JFormattedTextField celReserva;
+    public static javax.swing.JTextField cod2;
+    public static javax.swing.JTextField cod3;
+    public static javax.swing.JFormattedTextField cpf1;
+    public static javax.swing.JFormattedTextField cpfReserva;
+    public static javax.swing.JFormattedTextField data;
+    public static javax.swing.JFormattedTextField data1;
+    private javax.persistence.EntityManager entityManager;
+    public static javax.swing.JFormattedTextField fim1;
+    public static javax.swing.JFormattedTextField fimReserva;
+    public static javax.swing.JFormattedTextField inicio1;
+    public static javax.swing.JFormattedTextField inicioReserva;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -629,6 +938,7 @@ public class TelaPrincipal_GUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
@@ -637,6 +947,8 @@ public class TelaPrincipal_GUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel5;
@@ -645,8 +957,20 @@ public class TelaPrincipal_GUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JButton relatório;
+    public static javax.swing.JTextField nome1;
+    public static javax.swing.JTextField nomeReserva;
+    private org.edisoncor.gui.panel.PanelImage panelImage1;
+    private org.edisoncor.gui.panel.PanelImage panelImage2;
+    private org.edisoncor.gui.panel.PanelImage panelImage3;
+    private org.edisoncor.gui.panel.PanelImage panelImage4;
+    private java.util.List<View.Reservas> reservasList;
+    private java.util.List<View.Reservas> reservasList1;
+    private javax.persistence.Query reservasQuery;
+    private javax.persistence.Query reservasQuery1;
+    public static javax.swing.JTextField sala1;
+    public static javax.swing.JComboBox<String> salaReserva;
+    public static javax.swing.JTable tabelaConsultar;
+    public static javax.swing.JTable tabelaReservar;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }
